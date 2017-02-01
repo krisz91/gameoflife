@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Aim of this class is to parse a lif file
@@ -71,7 +72,26 @@ public class LIFParserImpl implements LIFParser {
 
         }
 
-        return livePoints;
+        int minRow = getMinRow(livePoints);
+        int minColumn = getMinColumn(livePoints);
+
+        List<Point> newPoints = livePoints.stream().map(point -> {
+            Point newPoint = new Point();
+            newPoint.setX(point.getX()-minRow);
+            newPoint.setY(point.getY()-minColumn);
+
+            return newPoint;
+        }).collect(Collectors.toList());
+
+        return newPoints;
+    }
+
+    private int getMinColumn(List<Point> livePoints) {
+        return livePoints.stream().map(Point::getY).min(Integer::compare).get();
+    }
+
+    private int getMinRow(List<Point> livePoints) {
+        return livePoints.stream().map(Point::getX).min(Integer::compare).get();
     }
 
     /**

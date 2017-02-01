@@ -1,3 +1,44 @@
 <h1>
-  {{title}}
+  GAME OF LIFE.........
 </h1>
+
+<fieldset>
+  <form>
+    Sorok száma: <input type="text" name="rows" [(ngModel)]="rows"/><br/>
+    Oszlopok száma:<input type="text" name="cols" [(ngModel)]="cols"/><br/>
+    <button (click)="changeSize()">Méret változtatása</button>
+  </form>
+
+</fieldset>
+
+<fieldset>
+  <select [(ngModel)]="selectedPattern">
+    <option *ngFor="let pattern of patterns">{{pattern}}</option>
+  </select>
+  <button (click)="loadPattern()">Betölt</button>
+</fieldset>
+
+
+<button (click)="getNextGeneration()">Következő generáció</button>
+
+<form>
+  <button (click)="saveState()">Állapot mentése</button>
+</form>
+
+
+<fieldset>Mentett játékok:
+  <select [(ngModel)]="selectedSavedGame">
+    <option *ngFor="let savedGame of savedGameNames" [value]="savedGame.id">{{savedGame.name}}</option>
+  </select>
+  <button (click)="loadSavedState()">Mentett játék betöltése</button>
+</fieldset>
+
+
+<table cellpadding="0" cellspacing="0" *ngIf="patternLoaded">
+
+  <tr *ngFor="let row of rowsArray" style="height:15px">
+
+    <td *ngFor="let column of colsArray" style="width:15px; border:1px solid black" (click)="makeLive(row,column)"
+        [ngClass]="{live: hasElement(row,column)}"></td>
+  </tr>
+</table>

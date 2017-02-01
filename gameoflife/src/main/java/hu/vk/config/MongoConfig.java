@@ -4,6 +4,7 @@ import java.net.UnknownHostException;
 
 import com.mongodb.Mongo;
 
+import hu.vk.Application;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -19,7 +20,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @Configuration
 @Lazy
-// @EnableMongoRepositories(basePackageClasses = Application.class)
+@EnableMongoRepositories(basePackageClasses = Application.class)
 class MongoConfig {
 
     @Bean

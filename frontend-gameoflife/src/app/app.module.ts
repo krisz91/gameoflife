@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import {GameService} from "./game.service";
+import {API_URL} from "./shared/data.service";
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { AppComponent } from './app.component';
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [
+    GameService, API_URL
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
