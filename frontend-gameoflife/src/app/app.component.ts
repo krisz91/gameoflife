@@ -4,6 +4,7 @@ import {Point} from "./point";
 import {Game} from "./game";
 import {Response} from "@angular/http";
 import {GetGameNameDto} from "./get-game-name-dto";
+import Timer = NodeJS.Timer;
 
 @Component({
   selector: 'app-root',
@@ -19,8 +20,6 @@ export class AppComponent implements OnInit {
   cols: number = 100;
 
   selectedPattern: string;
-
-  livePoints: Point[];
 
   patternLoaded: boolean = false;
 
@@ -56,8 +55,8 @@ export class AppComponent implements OnInit {
   }
 
   hasElement(x: number, y: number): boolean {
-    for (let i = 0; i < this.livePoints.length; i++) {
-      if (this.livePoints[i].x == x && this.livePoints[i].y == y) {
+    for (let i = 0; i < this.currentGame.livePoints.length; i++) {
+      if (this.currentGame.livePoints[i].x == x && this.currentGame.livePoints[i].y == y) {
         return true;
       }
     }
@@ -68,9 +67,7 @@ export class AppComponent implements OnInit {
 
     this.gameService.getPattern(this.selectedPattern).subscribe(points => {
 
-      this.livePoints = points;
-
-      this.currentGame = new Game(this.livePoints, this.rows, this.cols, 0, "Próba");
+      this.currentGame = new Game(points, this.rows, this.cols, 0, "Próba");
 
       this.patternLoaded = true;
     })
@@ -86,7 +83,6 @@ export class AppComponent implements OnInit {
   }
 
   setUpGame(game) {
-    this.livePoints = game.livePoints;
 
     this.currentGame = game;
 
@@ -96,16 +92,18 @@ export class AppComponent implements OnInit {
   makeLive(row: number, column: number): void {
 
     if (!this.hasElement(row, column)) {
-      this.livePoints.push(new Point(row, column));
+      this.currentGame.livePoints.push(new Point(row, column));
     }
   }
 
   changeSize(): void {
 
+    this.rowsArray = Array.from(Array(this.rows).keys());
+    this.colsArray = Array.from(Array(this.cols).keys());
     let newPoints: Point[] = [];
-    for (let i = 0; i < this.livePoints.length; i++) {
+    for (let i = 0; i < this.currentGame.livePoints.length; i++) {
 
-      let actualPoint: Point = this.livePoints[i];
+      let actualPoint: Point = this.currentGame.livePoints[i];
 
       if (actualPoint.x < this.rows && actualPoint.y < this.cols) {
 
@@ -113,18 +111,20 @@ export class AppComponent implements OnInit {
       }
 
     }
-    console.log(this.rows, this.cols);
 
-    this.livePoints = newPoints;
-    this.rowsArray = Array.from(Array(this.rows).keys());
-    this.colsArray = Array.from(Array(this.cols).keys());
 
-    console.log(this.rowsArray, this.colsArray);
+    this.currentGame.livePoints = newPoints;
+    console.log(this.currentGame.livePoints, newPoints);
+
   }
 
   saveState(): void {
 
     this.currentGame.name = prompt("Játék neve?", "Próba");
+
+    if (this.currentGame.name == "") {
+      alert("Név megadása kötelező");
+    }
     this.gameService.saveGame(this.currentGame).subscribe((response: Response) => {
       alert("Sikeres mentés");
       this.loadSavedGames();
@@ -135,5 +135,24 @@ export class AppComponent implements OnInit {
     this.gameService.loadGame(this.selectedSavedGame).subscribe((game: Game) => {
       this.setUpGame(game);
     })
+  }
+
+
+  timeoutHandler: Timer;
+
+  isAutoPlay: boolean = false;
+
+
+  autoplay(): void {
+
+    this.isAutoPlay = true;
+    this.timeoutHandler = setInterval(() => {
+      this.getNextGeneration();
+    }, 2000);
+  }
+
+  stopAutoPlay(): void {
+    this.isAutoPlay = false;
+    clearInterval(this.timeoutHandler);
   }
 }

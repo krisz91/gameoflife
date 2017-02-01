@@ -4,8 +4,8 @@
 
 <fieldset>
   <form>
-    Sorok száma: <input type="text" name="rows" [(ngModel)]="rows"/><br/>
-    Oszlopok száma:<input type="text" name="cols" [(ngModel)]="cols"/><br/>
+    Sorok száma: <input type="number" name="rows" [(ngModel)]="rows"/><br/>
+    Oszlopok száma:<input type="number" name="cols" [(ngModel)]="cols"/><br/>
     <button (click)="changeSize()">Méret változtatása</button>
   </form>
 
@@ -33,6 +33,11 @@
   <button (click)="loadSavedState()">Mentett játék betöltése</button>
 </fieldset>
 
+<button (click)="autoplay()" *ngIf="!isAutoPlay">Automatikus lejátszás indítása</button>
+<button (click)="stopAutoPlay()" *ngIf="isAutoPlay">Automatikus lejátszás szüneteltetése</button>
+
+
+<h3 *ngIf="currentGame">{{currentGame.generation}}. generáció</h3>
 
 <table cellpadding="0" cellspacing="0" *ngIf="patternLoaded">
 

@@ -1,6 +1,7 @@
 package hu.vk.service.api;
 
 import hu.vk.model.Game;
+import hu.vk.service.api.dto.GetGameDto;
 
 import java.util.List;
 

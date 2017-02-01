@@ -13,30 +13,57 @@ public class GenerationCalculatorServiceImpl implements GenerationCalculatorServ
     @Override
     public Game calculateNextGeneration(Game game) {
 
-        Game newGeneration = new Game();
+        Game newGeneration = createNewGame(game);
 
-        newGeneration.setColumns(game.getColumns());
-        newGeneration.setRows(game.getRows());
-        newGeneration.setGeneration(game.getGeneration() + 1);
+        calculateLivePoints(game, newGeneration);
 
+        return newGeneration;
+    }
+
+    private void calculateLivePoints(Game game, Game newGeneration) {
         int rows = game.getRows();
         int columns = game.getColumns();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
 
-                long neighbourCount = getNeighbourCount(game, i, j);
-                if ((neighbourCount == 3) && (!game.isLive(i, j))) {
-                    newGeneration.addLivePoint(i, j);
-                }
-
-                if ((neighbourCount == 2 || neighbourCount == 3) && game.isLive(i, j)) {
-                    newGeneration.addLivePoint(i, j);
-                }
+                calculatePoint(game, newGeneration, i, j);
 
             }
         }
+    }
 
+    private void calculatePoint(Game game, Game newGeneration, int i, int j) {
+        long neighbourCount = getNeighbourCount(game, i, j);
+
+        boolean isLive = game.isLive(i, j);
+
+        boolean willBeLiving = willLive(neighbourCount, isLive);
+
+        if (willBeLiving) {
+            newGeneration.addLivePoint(i, j);
+        }
+    }
+
+    private Game createNewGame(Game game) {
+        Game newGeneration = new Game();
+
+        newGeneration.setColumns(game.getColumns());
+        newGeneration.setRows(game.getRows());
+        newGeneration.setGeneration(game.getGeneration() + 1);
         return newGeneration;
+    }
+
+    public boolean willLive(long neighbourCount, boolean isLiveNow) {
+
+        if ((neighbourCount == 3) && !isLiveNow) {
+            return true;
+        }
+
+        if ((neighbourCount == 2 || neighbourCount == 3) && isLiveNow) {
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -44,7 +71,7 @@ public class GenerationCalculatorServiceImpl implements GenerationCalculatorServ
 
         return game.getLivePoints()
                 .stream()
-                .filter(livePoint -> livePoint.getX() < x + 2 && livePoint.getX() > x - 2 && livePoint.getY() > y - 2 && livePoint.getY() < y + 2).count()-1L;
+                .filter(livePoint -> livePoint.getX() < x + 2 && livePoint.getX() > x - 2 && livePoint.getY() > y - 2 && livePoint.getY() < y + 2).count() - 1L;
     }
 
 }

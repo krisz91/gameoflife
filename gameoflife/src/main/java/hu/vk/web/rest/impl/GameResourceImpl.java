@@ -1,9 +1,8 @@
 package hu.vk.web.rest.impl;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import hu.vk.model.Game;
 import hu.vk.service.api.GameService;
-import hu.vk.service.api.GetGameDto;
+import hu.vk.service.api.dto.GetGameDto;
 import hu.vk.web.rest.api.GameResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

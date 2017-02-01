@@ -25,9 +25,8 @@ public class LIFParserImpl implements LIFParser {
     public List<Point> parse(String fileName) throws IOException {
 
         List<Point> livePoints = Lists.newLinkedList();
-        Path path = Paths.get(fileName);
 
-        List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+        List<String> lines = getLines(fileName);
 
         Iterator it = lines.iterator();
 
@@ -37,9 +36,7 @@ public class LIFParserImpl implements LIFParser {
 
         while (it.hasNext()) {
 
-            if (!hasStartWidthP) {
-                line = (String) it.next();
-            }
+            line = skipHeaders(it, line, hasStartWidthP);
 
             hasStartWidthP = false;
 
@@ -47,7 +44,9 @@ public class LIFParserImpl implements LIFParser {
                 String[] number = StringUtils.split(line, " ");
 
                 int x = Integer.parseInt(number[1]);
+
                 int y = Integer.parseInt(number[2]);
+
                 List<String> pattern = new LinkedList<>();
 
                 /**
@@ -75,15 +74,32 @@ public class LIFParserImpl implements LIFParser {
         int minRow = getMinRow(livePoints);
         int minColumn = getMinColumn(livePoints);
 
-        List<Point> newPoints = livePoints.stream().map(point -> {
+        List<Point> newPoints = modifyPoints(livePoints, minRow, minColumn);
+
+        return newPoints;
+    }
+
+    private List<Point> modifyPoints(List<Point> livePoints, int minRow, int minColumn) {
+        return livePoints.stream().map(point -> {
             Point newPoint = new Point();
-            newPoint.setX(point.getX()-minRow);
-            newPoint.setY(point.getY()-minColumn);
+            newPoint.setX(point.getX() - minRow);
+            newPoint.setY(point.getY() - minColumn);
 
             return newPoint;
         }).collect(Collectors.toList());
+    }
 
-        return newPoints;
+    private String skipHeaders(Iterator it, String line, boolean hasStartWidthP) {
+        if (!hasStartWidthP) {
+            line = (String) it.next();
+        }
+        return line;
+    }
+
+    private List<String> getLines(String fileName) throws IOException {
+        Path path = Paths.get(fileName);
+
+        return Files.readAllLines(path, StandardCharsets.UTF_8);
     }
 
     private int getMinColumn(List<Point> livePoints) {

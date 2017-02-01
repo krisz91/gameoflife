@@ -1,4 +1,4 @@
-package hu.vk.service.api;
+package hu.vk.service.api.dto;
 
 import lombok.Data;
 

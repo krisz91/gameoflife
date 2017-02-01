@@ -1,7 +1,6 @@
 package hu.vk.web.rest.api;
 
 import hu.vk.model.Game;
-import hu.vk.service.api.GetGameDto;
 import org.springframework.http.ResponseEntity;
 
 /**

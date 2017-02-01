@@ -15,6 +15,25 @@ import static org.junit.Assert.*;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class GenerationCalculatorServiceImplTest {
+    @Test
+    public void calculateNextGeneration() throws Exception {
+
+    }
+
+    @Test
+    public void willLive() throws Exception {
+
+        Assert.assertTrue(generationCalculatorService.willLive(3,false));
+        Assert.assertTrue(generationCalculatorService.willLive(3,true));
+        Assert.assertTrue(generationCalculatorService.willLive(2,true));
+        Assert.assertFalse(generationCalculatorService.willLive(4,true));
+        Assert.assertFalse(generationCalculatorService.willLive(4,false));
+    }
+
+    @Test
+    public void getNeighbourCount() throws Exception {
+
+    }
 
 
     @InjectMocks

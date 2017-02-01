@@ -5,7 +5,7 @@ import hu.vk.model.Game;
 import hu.vk.repository.GameRepository;
 import hu.vk.service.api.GameService;
 import hu.vk.service.api.GameValidator;
-import hu.vk.service.api.GetGameDto;
+import hu.vk.service.api.dto.GetGameDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
