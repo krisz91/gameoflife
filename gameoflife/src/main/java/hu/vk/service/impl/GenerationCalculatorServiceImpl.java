@@ -1,11 +1,8 @@
 package hu.vk.service.impl;
 
 import hu.vk.model.Game;
-import hu.vk.model.LivePoint;
 import hu.vk.service.api.GenerationCalculatorService;
 import org.springframework.stereotype.Service;
-
-import javax.xml.ws.ServiceMode;
 
 /**
  * Created by vargakrisztian on 2017. 02. 01..

@@ -7,10 +7,12 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 import hu.vk.Application;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @PropertySource("classpath:application.properties")
 @ComponentScan(basePackageClasses = Application.class)
+@EnableWebMvc
 class ApplicationConfig {
 
     @Bean

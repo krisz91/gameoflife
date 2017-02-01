@@ -29,8 +29,6 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
 
-
-
         return new Filter[] {characterEncodingFilter};
     }
 
